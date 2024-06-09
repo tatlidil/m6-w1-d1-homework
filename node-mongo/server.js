@@ -1,15 +1,10 @@
 const express = require('express');
 const app = express();
 const bodyParser = require('body-parser');
-const cors = require('cors');
-const mongoose = require('mongoose');
-require('dotenv').config();
-
-// Import models
-require('./app/models/inventory.model.js');
-
-app.use(cors());
 app.use(bodyParser.json());
+require('./app/models/inventory.model.js');
+require('dotenv').config();
+const mongoose = require('mongoose');
 
 // Connecting to the database
 mongoose.connect(process.env.DATABASE, {
@@ -22,17 +17,7 @@ mongoose.connect(process.env.DATABASE, {
     process.exit();
 });
 
-mongoose.connection
-    .on('open', () => {
-        console.log('Mongoose connection open');
-    })
-    .on('error', (err) => {
-        console.log(`Connection error: ${err.message}`);
-    });
-
-// Define the routes
 require('./app/routes/inventory.router.js')(app);
-
 // Create a Server
 const server = app.listen(8080, function () {
     const host = server.address().address;
